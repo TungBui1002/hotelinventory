@@ -1,0 +1,13 @@
+<h1>WELCOM TO {{hotelName}}</h1>
+<div [hidden]="hideRooms">Number of rooms: {{numberOfRooms}}</div>
+
+
+<button (click)="toggle()">{{hideRooms ? 'Show' : 'Hide'}}</button>
+
+<div *ngIf="rooms.availableRooms > 0">
+    <hinv-rooms-list [rooms]="roomList"></hinv-rooms-list>
+</div>
+
+
+<button class = "btn btn-primary">Add Room</button>
+

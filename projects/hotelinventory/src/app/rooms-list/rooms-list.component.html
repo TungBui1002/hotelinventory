@@ -1,0 +1,72 @@
+<!-- Search Section -->
+<div class="search-section mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Search by room type..." [(ngModel)]="searchText">
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" [(ngModel)]="selectedPrice">
+                <option value="">All Prices</option>
+                <option value="5000">Luxury (5000+)</option>
+                <option value="3000">Standard (3000-4999)</option>
+                <option value="1000">Budget (1000-2999)</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" [(ngModel)]="selectedRating">
+                <option value="">All Ratings</option>
+                <option value="4.5">High (4.5+)</option>
+                <option value="4">Medium (4-4.4)</option>
+                <option value="3">Low (3-3.9)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Rooms Grid -->
+<div class="row">
+    <div class="col-md-4 mb-4" *ngFor="let room of rooms | filterRooms:searchText:selectedPrice:selectedRating">
+        <div class="card h-100" [ngClass]="{
+            'luxury-room': room.price >= 5000,
+            'standard-room': room.price < 5000
+        }">
+            <img [src]="room.photos" class="card-img-top" alt="Room photo">
+            <div class="card-body">
+                <h5 class="card-title">{{room.roomType|uppercase}}</h5>
+                <p class="card-text">
+                    <strong>Price:</strong> 
+                    <span [ngStyle]="{
+                        'color': room.price >= 5000 ? 'red' : 'green',
+                        'font-weight': 'bold'
+                    }">{{room.price | currency}}</span>
+                </p>
+                <p class="card-text">
+                    <strong>Amenities:</strong> {{room.amenities}}
+                </p>
+                <p class="card-text">
+                    <strong>Rating:</strong>
+                    <span [ngClass]="{
+                        'high-rating': room.rating >= 4.5,
+                        'medium-rating': room.rating >= 4 && room.rating < 4.5,
+                        'low-rating': room.rating < 4
+                    }">{{room.rating}}</span>
+                </p>
+                <p class="card-text">
+                    <strong>Check-in:</strong> {{room.checkinTime | date : 'yyyy/MM/dd'}}<br>
+                    <strong>Check-out:</strong> {{room.checkoutTime | date: 'yyyy/MM/dd'}}
+                </p>
+                <div class="room-status">
+                    <span [ngSwitch]="room.price" class="badge">
+                        <span *ngSwitchCase="9999" class="badge bg-warning">VIP</span>
+                        <span *ngSwitchCase="9000" class="badge bg-purple">Premium</span>
+                        <span *ngSwitchCase="5000" class="badge bg-primary">Deluxe</span>
+                        <span *ngSwitchDefault class="badge bg-success">Standard</span>
+                    </span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary w-100" (click)="bookRoom(room)">Book Now</button>
+            </div>
+        </div>
+    </div>
+</div>
